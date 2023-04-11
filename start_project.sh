@@ -3,7 +3,9 @@
 mkdir project
 touch ./project/Makefile
 mkdir ./project/srcs
+touch ./project/srcs/.env
 mkdir ./project/srcs/requirements
+touch ./project/srcs/docker-compose.yml
 mkdir ./project/srcs/requirements/bonus
 mkdir ./project/srcs/requirements/mariadb
 mkdir ./project/srcs/requirements/nginx
