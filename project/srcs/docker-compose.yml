@@ -1,8 +1,19 @@
 services:
   nginx:
     build: requirements/nginx/
+    container_name: nginx
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./requirements/nginx/conf/:/etc/nginx/http.d/
+    restart: always
+    networks:
+      skynet:
+        ipv4_address: 192.168.92.21
+networks:
+  skynet:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.92.0/24"
