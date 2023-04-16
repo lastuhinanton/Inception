@@ -1,6 +1,8 @@
 services:
   nginx:
-    build: requirements/nginx/
+    build:
+      context: .
+      dockerfile: requirements/nginx/
     container_name: nginx
     ports:
       - "80:80"
@@ -11,6 +13,22 @@ services:
     networks:
       skynet:
         ipv4_address: 192.168.92.21
+  mariadb:
+    build:
+      context: .
+      dockerfile: requirements/mariadb
+      args:
+        DB_NAME: ${DB_NAME}
+        DB_USER: ${DB_USER}
+        DB_PASS: ${DB_PASS}
+        DB_ROOT: ${DB_ROOT}
+    container_name: mariadb
+    ports:
+      - "3306:3306"
+    restart: always
+    networks:
+      skynet:
+        ipv4_address: 192.168.92.22
 networks:
   skynet:
     ipam:
