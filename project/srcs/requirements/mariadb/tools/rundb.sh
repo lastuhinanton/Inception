@@ -3,18 +3,15 @@
 if [ ! -d "/var/lib/mysql/mysql" ]; then
     chown -R mysql:mysql /var/lib/mysql
 
+    echo "CHECK!" >2
     mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql --rpm
-    echo CHECK
     tfile=`mktemp`
     [ ! -f "$tfile" ] && { return 1; }
 fi
+echo "CHECK"
 
 
 if [ ! -d "/var/lib/mysql/wordpress" ]; then
-DB_NAME=wordpress
-DB_ROOT=rootpass
-DB_USER=wpuser
-DB_PASS=wppass
 echo "UUYEAH!"
         cat << EOF > /tmp/create_db.sql
 USE mysql;
@@ -29,6 +26,7 @@ CREATE USER '${DB_USER}'@'%' IDENTIFIED by '${DB_PASS}';
 GRANT ALL PRIVILEGES ON wordpress.* TO '${DB_USER}'@'%';
 FLUSH PRIVILEGES;
 EOF
-    /usr/bin/mysqld --user=mysql --bootstrap < /tmp/create_db.sql
+echo "UUYEAH!"
+    /usr/bin/mysqld --user=wordpress --bootstrap < /tmp/create_db.sql
     rm -f /tmp/create_db.sql
 fi
