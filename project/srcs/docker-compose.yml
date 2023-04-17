@@ -1,8 +1,6 @@
 services:
   nginx:
-    build:
-      context: .
-      dockerfile: requirements/nginx/
+    build: requirements/nginx/
     container_name: nginx
     ports:
       - "80:80"
@@ -16,7 +14,7 @@ services:
   mariadb:
     build:
       context: .
-      dockerfile: requirements/mariadb
+      dockerfile: requirements/mariadb/Dockerfile
       args:
         DB_NAME: ${DB_NAME}
         DB_USER: ${DB_USER}
