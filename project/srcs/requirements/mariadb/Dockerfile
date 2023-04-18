@@ -1,8 +1,12 @@
-ARG VERSION=3.17.3
-FROM alpine:$VERSION
+ARG DB_NAME \
+    DB_USER \
+    DB_PASS \
+    ALPINE_VERSION
+    
+FROM alpine:${ALPINE_VERSION}
 
 RUN apk update && apk upgrade && \
-    apk add --no-cache mariadb mariadb-common mariadb-client openrc
+    apk add --no-cache mariadb mariadb-client
 
 RUN mkdir /var/run/mysqld; \
     chmod 777 /var/run/mysqld; \
@@ -16,10 +20,7 @@ RUN mkdir /var/run/mysqld; \
 
 RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
-EXPOSE 3306
-
-COPY ./tools/rundb.sh .
-RUN sh rundb.sh && rm rundb.sh
+COPY ./requirements/mariadb/tools/rundb.sh .
+RUN sh rundb.sh 
 USER mysql
-
-ENTRYPOINT ["/usr/bin/mysqld", "--skip-log-error"]
+CMD ["/usr/bin/mysqld", "--skip-log-error"]
