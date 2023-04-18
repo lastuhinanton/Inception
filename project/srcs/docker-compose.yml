@@ -1,12 +1,16 @@
 services:
   nginx:
-    build: requirements/nginx/
+    build:
+      context: .
+      dockerfile: requirements/nginx/Dockerfile
+      args:
+        ALPINE_VERSION: ${ALPINE_VERSION}
     container_name: nginx
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./requirements/nginx/conf/:/etc/nginx/http.d/
+      - skywww:/usr/share/nginx/www
     restart: always
     networks:
       skynet:
@@ -20,9 +24,12 @@ services:
         DB_USER: ${DB_USER}
         DB_PASS: ${DB_PASS}
         DB_ROOT: ${DB_ROOT}
+        ALPINE_VERSION: ${ALPINE_VERSION}
     container_name: mariadb
     ports:
       - "3306:3306"
+    volumes:
+      - skydb:/var/lib/mysql
     restart: always
     networks:
       skynet:
@@ -33,3 +40,14 @@ networks:
       driver: default
       config:
         - subnet: "192.168.92.0/24"
+volumes:
+  skydb:
+    driver_opts:
+      o: 'bind'
+      type: 'none'
+      device: '/home/anton/Inception/project/data/database'
+  skywww:
+    driver_opts:
+      o: 'bind'
+      type: 'none'
+      device: '/home/anton/Inception/project/data/www'
