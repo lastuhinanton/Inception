@@ -1,9 +1,10 @@
-ARG DB_NAME \
-    DB_USER \
-    DB_PASS \
-    ALPINE_VERSION
+ARG ALPINE_VERSION
     
 FROM alpine:${ALPINE_VERSION}
+
+ARG DB_NAME \
+    DB_USER \
+    DB_PASS 
 
 RUN apk update && apk upgrade && \
     apk add --no-cache mariadb mariadb-client
@@ -21,6 +22,6 @@ RUN mkdir /var/run/mysqld; \
 RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
 COPY ./requirements/mariadb/tools/rundb.sh .
-RUN sh rundb.sh 
+RUN sh rundb.sh && rm rundb.sh
 USER mysql
 CMD ["/usr/bin/mysqld", "--skip-log-error"]
