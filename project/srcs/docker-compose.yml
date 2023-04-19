@@ -6,15 +6,15 @@ services:
       args:
         ALPINE_VERSION: ${ALPINE_VERSION}
     container_name: nginx
+    depends_on:
+      - wordpress
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - skywww:/usr/share/nginx/www
     restart: always
     networks:
-      skynet:
-        ipv4_address: 192.168.92.21
+      - skynet
   mariadb:
     build:
       context: .
@@ -32,14 +32,26 @@ services:
       - skydb:/var/lib/mysql
     restart: always
     networks:
-      skynet:
-        ipv4_address: 192.168.92.22
+      - skynet
+  wordpress:
+    build:
+      context: .
+      dockerfile: requirements/wordpress/Dockerfile
+      args:
+        DB_NAME: ${DB_NAME}
+        DB_USER: ${DB_USER}
+        DB_PASS: ${DB_PASS}
+    container_name: wordpress
+    depends_on:
+      - mariadb
+    volumes:
+      - skywww:/var/www/
+    restart: always
+    networks:
+      - skynet
 networks:
   skynet:
-    ipam:
-      driver: default
-      config:
-        - subnet: "192.168.92.0/24"
+      driver: bridge
 volumes:
   skydb:
     driver_opts:
