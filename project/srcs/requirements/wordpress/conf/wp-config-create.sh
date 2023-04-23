@@ -20,5 +20,4 @@ define( 'WP_REDIS_READ_TIMEOUT', 1 );
 define( 'WP_REDIS_DATABASE', 0 );
 require_once ABSPATH . 'wp-settings.php';
 EOF
-ls
 fi

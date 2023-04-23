@@ -12,7 +12,9 @@ services:
       - "80:80"
       - "8080:80"
     volumes:
-      - skywww:/usr/share/nginx/www:z
+      - ./requirements/nginx/conf/:/etc/nginx/http.d/
+      # - skywww:/usr/share/nginx/www
+      - skywww:/var/www
       - ./logs:/var/log/nginx
     restart: always
     networks:
