@@ -10229,3 +10229,265 @@ module.exports = UploaderWindow;
 /***/ }),
 
 /***/ 487:
+/***/ (function(module) {
+
+/**
+ * wp.media.View
+ *
+ * The base view class for media.
+ *
+ * Undelegating events, removing events from the model, and
+ * removing events from the controller mirror the code for
+ * `Backbone.View.dispose` in Backbone 0.9.8 development.
+ *
+ * This behavior has since been removed, and should not be used
+ * outside of the media manager.
+ *
+ * @memberOf wp.media
+ *
+ * @class
+ * @augments wp.Backbone.View
+ * @augments Backbone.View
+ */
+var View = wp.Backbone.View.extend(/** @lends wp.media.View.prototype */{
+	constructor: function( options ) {
+		if ( options && options.controller ) {
+			this.controller = options.controller;
+		}
+		wp.Backbone.View.apply( this, arguments );
+	},
+	/**
+	 * @todo The internal comment mentions this might have been a stop-gap
+	 *       before Backbone 0.9.8 came out. Figure out if Backbone core takes
+	 *       care of this in Backbone.View now.
+	 *
+	 * @return {wp.media.View} Returns itself to allow chaining.
+	 */
+	dispose: function() {
+		/*
+		 * Undelegating events, removing events from the model, and
+		 * removing events from the controller mirror the code for
+		 * `Backbone.View.dispose` in Backbone 0.9.8 development.
+		 */
+		this.undelegateEvents();
+
+		if ( this.model && this.model.off ) {
+			this.model.off( null, null, this );
+		}
+
+		if ( this.collection && this.collection.off ) {
+			this.collection.off( null, null, this );
+		}
+
+		// Unbind controller events.
+		if ( this.controller && this.controller.off ) {
+			this.controller.off( null, null, this );
+		}
+
+		return this;
+	},
+	/**
+	 * @return {wp.media.View} Returns itself to allow chaining.
+	 */
+	remove: function() {
+		this.dispose();
+		/**
+		 * call 'remove' directly on the parent class
+		 */
+		return wp.Backbone.View.prototype.remove.apply( this, arguments );
+	}
+});
+
+module.exports = View;
+
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+!function() {
+/**
+ * @output wp-includes/js/media-views.js
+ */
+
+var media = wp.media,
+	$ = jQuery,
+	l10n;
+
+media.isTouchDevice = ( 'ontouchend' in document );
+
+// Link any localized strings.
+l10n = media.view.l10n = window._wpMediaViewsL10n || {};
+
+// Link any settings.
+media.view.settings = l10n.settings || {};
+delete l10n.settings;
+
+// Copy the `post` setting over to the model settings.
+media.model.settings.post = media.view.settings.post;
+
+// Check if the browser supports CSS 3.0 transitions.
+$.support.transition = (function(){
+	var style = document.documentElement.style,
+		transitions = {
+			WebkitTransition: 'webkitTransitionEnd',
+			MozTransition:    'transitionend',
+			OTransition:      'oTransitionEnd otransitionend',
+			transition:       'transitionend'
+		}, transition;
+
+	transition = _.find( _.keys( transitions ), function( transition ) {
+		return ! _.isUndefined( style[ transition ] );
+	});
+
+	return transition && {
+		end: transitions[ transition ]
+	};
+}());
+
+/**
+ * A shared event bus used to provide events into
+ * the media workflows that 3rd-party devs can use to hook
+ * in.
+ */
+media.events = _.extend( {}, Backbone.Events );
+
+/**
+ * Makes it easier to bind events using transitions.
+ *
+ * @param {string} selector
+ * @param {number} sensitivity
+ * @return {Promise}
+ */
+media.transition = function( selector, sensitivity ) {
+	var deferred = $.Deferred();
+
+	sensitivity = sensitivity || 2000;
+
+	if ( $.support.transition ) {
+		if ( ! (selector instanceof $) ) {
+			selector = $( selector );
+		}
+
+		// Resolve the deferred when the first element finishes animating.
+		selector.first().one( $.support.transition.end, deferred.resolve );
+
+		// Just in case the event doesn't trigger, fire a callback.
+		_.delay( deferred.resolve, sensitivity );
+
+	// Otherwise, execute on the spot.
+	} else {
+		deferred.resolve();
+	}
+
+	return deferred.promise();
+};
+
+media.controller.Region = __webpack_require__( 4903 );
+media.controller.StateMachine = __webpack_require__( 5466 );
+media.controller.State = __webpack_require__( 5826 );
+
+media.selectionSync = __webpack_require__( 3526 );
+media.controller.Library = __webpack_require__( 9024 );
+media.controller.ImageDetails = __webpack_require__( 3849 );
+media.controller.GalleryEdit = __webpack_require__( 6328 );
+media.controller.GalleryAdd = __webpack_require__( 7323 );
+media.controller.CollectionEdit = __webpack_require__( 1817 );
+media.controller.CollectionAdd = __webpack_require__( 1517 );
+media.controller.FeaturedImage = __webpack_require__( 5095 );
+media.controller.ReplaceImage = __webpack_require__( 8493 );
+media.controller.EditImage = __webpack_require__( 7658 );
+media.controller.MediaLibrary = __webpack_require__( 3742 );
+media.controller.Embed = __webpack_require__( 9067 );
+media.controller.Cropper = __webpack_require__( 2288 );
+media.controller.CustomizeImageCropper = __webpack_require__( 6934 );
+media.controller.SiteIconCropper = __webpack_require__( 5274 );
+
+media.View = __webpack_require__( 487 );
+media.view.Frame = __webpack_require__( 3647 );
+media.view.MediaFrame = __webpack_require__( 4861 );
+media.view.MediaFrame.Select = __webpack_require__( 8719 );
+media.view.MediaFrame.Post = __webpack_require__( 9075 );
+media.view.MediaFrame.ImageDetails = __webpack_require__( 9142 );
+media.view.Modal = __webpack_require__( 3939 );
+media.view.FocusManager = __webpack_require__( 6557 );
+media.view.UploaderWindow = __webpack_require__( 5823 );
+media.view.EditorUploader = __webpack_require__( 841 );
+media.view.UploaderInline = __webpack_require__( 6353 );
+media.view.UploaderStatus = __webpack_require__( 2894 );
+media.view.UploaderStatusError = __webpack_require__( 9411 );
+media.view.Toolbar = __webpack_require__( 9510 );
+media.view.Toolbar.Select = __webpack_require__( 6850 );
+media.view.Toolbar.Embed = __webpack_require__( 7128 );
+media.view.Button = __webpack_require__( 3157 );
+media.view.ButtonGroup = __webpack_require__( 4094 );
+media.view.PriorityList = __webpack_require__( 1993 );
+media.view.MenuItem = __webpack_require__( 917 );
+media.view.Menu = __webpack_require__( 2596 );
+media.view.RouterItem = __webpack_require__( 9484 );
+media.view.Router = __webpack_require__( 1562 );
+media.view.Sidebar = __webpack_require__( 9799 );
+media.view.Attachment = __webpack_require__( 5019 );
+media.view.Attachment.Library = __webpack_require__( 9254 );
+media.view.Attachment.EditLibrary = __webpack_require__( 4640 );
+media.view.Attachments = __webpack_require__( 8408 );
+media.view.Search = __webpack_require__( 4556 );
+media.view.AttachmentFilters = __webpack_require__( 4906 );
+media.view.DateFilter = __webpack_require__( 9663 );
+media.view.AttachmentFilters.Uploaded = __webpack_require__( 7040 );
+media.view.AttachmentFilters.All = __webpack_require__( 2868 );
+media.view.AttachmentsBrowser = __webpack_require__( 9239 );
+media.view.Selection = __webpack_require__( 6191 );
+media.view.Attachment.Selection = __webpack_require__( 9003 );
+media.view.Attachments.Selection = __webpack_require__( 1223 );
+media.view.Attachment.EditSelection = __webpack_require__( 1009 );
+media.view.Settings = __webpack_require__( 859 );
+media.view.Settings.AttachmentDisplay = __webpack_require__( 2176 );
+media.view.Settings.Gallery = __webpack_require__( 6872 );
+media.view.Settings.Playlist = __webpack_require__( 8488 );
+media.view.Attachment.Details = __webpack_require__( 7274 );
+media.view.AttachmentCompat = __webpack_require__( 8093 );
+media.view.Iframe = __webpack_require__( 6217 );
+media.view.Embed = __webpack_require__( 5138 );
+media.view.Label = __webpack_require__( 6644 );
+media.view.EmbedUrl = __webpack_require__( 4848 );
+media.view.EmbedLink = __webpack_require__( 6959 );
+media.view.EmbedImage = __webpack_require__( 1338 );
+media.view.ImageDetails = __webpack_require__( 7598 );
+media.view.Cropper = __webpack_require__( 7137 );
+media.view.SiteIconCropper = __webpack_require__( 5187 );
+media.view.SiteIconPreview = __webpack_require__( 8260 );
+media.view.EditImage = __webpack_require__( 5970 );
+media.view.Spinner = __webpack_require__( 2234 );
+media.view.Heading = __webpack_require__( 7990 );
+
+}();
+/******/ })()
+;

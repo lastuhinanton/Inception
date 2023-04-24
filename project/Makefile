@@ -17,6 +17,10 @@ ps:
 	@printf "View configuration\n"
 	@docker-compose -f ./srcs/docker-compose.yml ps
 
+del:
+	@printf "Delete volume data\n"
+	@bash srcs/deleteData.sh
+
 re: down
 	@printf "Rebuild configuration ${name}...\n"
 	@docker-compose -f ./srcs/docker-compose.yml --env-file srcs/.env up -d --build

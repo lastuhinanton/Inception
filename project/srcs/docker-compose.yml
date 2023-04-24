@@ -13,9 +13,8 @@ services:
       - "8080:80"
     volumes:
       - ./requirements/nginx/conf/:/etc/nginx/http.d/
-      # - skywww:/usr/share/nginx/www
+      - ../data/logs:/var/log/nginx
       - skywww:/var/www
-      - ./logs:/var/log/nginx
     restart: always
     networks:
       - skynet
@@ -49,7 +48,7 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - skywww:/var/www:z
+      - skywww:/var/www
     restart: always
     networks:
       - skynet
