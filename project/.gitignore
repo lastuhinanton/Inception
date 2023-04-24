@@ -1,3 +1,1 @@
-data/database/*
-data/logs/*
-data/www/*
+data/**

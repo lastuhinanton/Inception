@@ -17,10 +17,6 @@ ps:
 	@printf "View configuration\n"
 	@docker-compose -f ./srcs/docker-compose.yml ps
 
-del:
-	@printf "Delete volume data\n"
-	@bash srcs/deleteData.sh
-
 test:
 	@printf "Run test scripts\n"
 	@bash srcs/check.sh
@@ -28,6 +24,13 @@ test:
 re: down
 	@printf "Rebuild configuration ${name}...\n"
 	@docker-compose -f ./srcs/docker-compose.yml --env-file srcs/.env up -d --build
+
+reall: down
+	@printf "Rebuild all all\n"
+	@sudo rm -rf ./data/database/* ./data/www/* ./data/logs/* ./data/grafana_data/* ./data/prometheus_data/*
+	@docker system prune -a
+	@make build
+	@sudo chmod -R 777 ./data
 
 clean: down
 	@printf "Cleaning configuration ${name}...\n"
