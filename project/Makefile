@@ -21,6 +21,10 @@ del:
 	@printf "Delete volume data\n"
 	@bash srcs/deleteData.sh
 
+test:
+	@printf "Run test scripts\n"
+	@bash srcs/check.sh
+
 re: down
 	@printf "Rebuild configuration ${name}...\n"
 	@docker-compose -f ./srcs/docker-compose.yml --env-file srcs/.env up -d --build
