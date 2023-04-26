@@ -16,8 +16,7 @@ services:
       - skywww:/var/www
     restart: always
     networks:
-      skynet:
-        ipv4_address: 192.168.92.2
+      - skynet
   mariadb:
     build:
       context: .
@@ -35,8 +34,7 @@ services:
       - skydb:/var/lib/mysql
     restart: always
     networks:
-      skynet:
-        ipv4_address: 192.168.92.3
+      - skynet
   wordpress:
     build:
       context: .
@@ -52,8 +50,7 @@ services:
       - skywww:/var/www
     restart: always
     networks:
-      skynet:
-        ipv4_address: 192.168.92.4
+      - skynet
 
   # grafana:
   #   image: grafana/grafana-oss:8.5.22
@@ -75,16 +72,12 @@ services:
       - ./requirements/prometheus/conf/:/etc/prometheus
     restart: always
     networks:
-      skynet:
-        ipv4_address: 192.168.92.5
+      - skynet
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
 networks:
   skynet:
-    ipam:
-      driver: default
-      config:
-        - subnet: "192.168.92.0/24"
+    driver: bridge
 volumes:
   skylogs:
     driver_opts:
