@@ -10,6 +10,7 @@ services:
       - wordpress
     ports:
       - "80:80"
+      - "9101:9100"
     volumes:
       - ./requirements/nginx/conf/:/etc/nginx/http.d/
       - skylogs:/var/log/nginx
@@ -51,7 +52,6 @@ services:
     restart: always
     networks:
       - skynet
-
   # grafana:
   #   image: grafana/grafana-oss:8.5.22
   #   container_name: grafana
@@ -62,19 +62,34 @@ services:
   #   restart: always
   #   networks:
   #     - skynet
-  prometheus:
-    image: prom/prometheus:v2.43.0
-    container_name: prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - prometheus-data:/prometheus
-      - ./requirements/prometheus/conf/:/etc/prometheus
-    restart: always
-    networks:
-      - skynet
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
+  # prometheus:
+  #   image: prom/prometheus:v2.43.0
+  #   container_name: prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - prometheus-data:/prometheus
+  #     - ./requirements/prometheus/conf/:/etc/prometheus
+  #   restart: always
+  #   depends_on:
+  #     - nginx
+  #   networks:
+  #     - skynet
+  #   command:
+  #     - "--config.file=/etc/prometheus/prometheus.yml"
+  # nginx-exporter:
+  #   image: nginx/nginx-prometheus-exporter
+  #   environment:
+  #       - SCRAPE_URI=http://localhost/metrics
+  #       - TELEMETRY_PATH=/metrics
+  #       - NGINX_RETRIES=10
+  #   ports:
+  #     - "9113:9113"
+  #   container_name: nginx-exporter
+  #   depends_on:
+  #     - nginx
+  #   networks:
+  #     - skynet
 networks:
   skynet:
     driver: bridge
