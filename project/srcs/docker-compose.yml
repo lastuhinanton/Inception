@@ -62,21 +62,21 @@ services:
   #   restart: always
   #   networks:
   #     - skynet
-  # prometheus:
-  #   image: prom/prometheus:v2.43.0
-  #   container_name: prometheus
-  #   ports:
-  #     - "9090:9090"
-  #   volumes:
-  #     - prometheus-data:/prometheus
-  #     - ./requirements/prometheus/conf/:/etc/prometheus
-  #   restart: always
-  #   depends_on:
-  #     - nginx
-  #   networks:
-  #     - skynet
-  #   command:
-  #     - "--config.file=/etc/prometheus/prometheus.yml"
+  prometheus:
+    image: prom/prometheus:v2.43.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus-data:/prometheus
+      - ./requirements/prometheus/conf/:/etc/prometheus
+    restart: always
+    depends_on:
+      - nginx
+    networks:
+      - skynet
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
   # nginx-exporter:
   #   image: nginx/nginx-prometheus-exporter
   #   environment:
@@ -92,7 +92,10 @@ services:
   #     - skynet
 networks:
   skynet:
-    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.92.0/24"
 volumes:
   skylogs:
     driver_opts:
