@@ -55,6 +55,7 @@ services:
   grafana:
     build:
       context: .
+      dockerfile: requirements/grafana/Dockerfile
       args:
         GRAFANA_VERSION: ${GRAFANA_VERSION}
     container_name: grafana
@@ -80,19 +81,6 @@ services:
       - skynet
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
-  # nginx-exporter:
-  #   image: nginx/nginx-prometheus-exporter
-  #   environment:
-  #       - SCRAPE_URI=http://localhost/metrics
-  #       - TELEMETRY_PATH=/metrics
-  #       - NGINX_RETRIES=10
-  #   ports:
-  #     - "9113:9113"
-  #   container_name: nginx-exporter
-  #   depends_on:
-  #     - nginx
-  #   networks:
-  #     - skynet
 networks:
   skynet:
     ipam:
