@@ -67,13 +67,16 @@ services:
     networks:
       - skynet
   prometheus:
-    image: prom/prometheus:v2.43.0
+    build:
+      context: .
+      dockerfile: requirements/prometheus/Dockerfile
+      args:
+        PROMETHEUS_VERSION: v${PROMETHEUS_VERSION}
     container_name: prometheus
     ports:
       - "9090:9090"
     volumes:
       - prometheus-data:/prometheus
-      - ./requirements/prometheus/conf/:/etc/prometheus
     restart: always
     depends_on:
       - nginx
