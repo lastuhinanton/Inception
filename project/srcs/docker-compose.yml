@@ -52,16 +52,19 @@ services:
     restart: always
     networks:
       - skynet
-  # grafana:
-  #   image: grafana/grafana-oss:8.5.22
-  #   container_name: grafana
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - grafana-data:/var/lib/grafana
-  #   restart: always
-  #   networks:
-  #     - skynet
+  grafana:
+    build:
+      context: .
+      args:
+        GRAFANA_VERSION: ${GRAFANA_VERSION}
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: always
+    networks:
+      - skynet
   prometheus:
     image: prom/prometheus:v2.43.0
     container_name: prometheus
