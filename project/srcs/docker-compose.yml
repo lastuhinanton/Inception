@@ -64,6 +64,34 @@ services:
     networks:
       - skynet
     restart: always
+  vsftpd:
+    build:
+      context: .
+      dockerfile: requirements/bonus/vsftpd/Dockerfile
+      args:
+        ALPINE_VERSION: ${ALPINE_VERSION}
+        FTP_USR: ${FTP_USR}
+        FTP_PWD: ${FTP_PWD}
+    container_name: vsftpd
+    ports:
+      - "21:21"
+    volumes:
+      - skywww:/var/www/
+    networks:
+      - skynet
+    restart: always
+  adminer:
+    build:
+      context: .
+      dockerfile: requirements/bonus/adminer/Dockerfile
+    container_name: adminer
+    depends_on:
+      - mariadb
+    ports:
+     - "8080:8080"
+    networks:
+      - skynet
+    restart: always
   grafana:
     build:
       context: .
