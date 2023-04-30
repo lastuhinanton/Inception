@@ -84,6 +84,8 @@ services:
     build:
       context: .
       dockerfile: requirements/bonus/adminer/Dockerfile
+      args:
+        ALPINE_VERSION: ${ALPINE_VERSION}
     container_name: adminer
     depends_on:
       - mariadb
