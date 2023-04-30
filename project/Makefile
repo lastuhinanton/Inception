@@ -27,7 +27,7 @@ re: down
 
 reall: down
 	@printf "Rebuild all all\n"
-	@sudo rm -rf ./data/database/* ./data/www/* ./data/logs/* ./data/grafana_data/* ./data/prometheus_data/*
+	@sudo rm -rf ./data/database/* ./data/www/* ./data/logs/* ./data/prometheus_data/*
 	@docker system prune -a
 	@make build
 	@sudo chmod -R 777 ./data
