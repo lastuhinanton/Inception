@@ -1,8 +1,5 @@
-ARG ALPINE_VERSION
-FROM alpine:${ALPINE_VERSION}
-
+FROM alpine:3.16
 ARG PHP_VERSION=8
-
 RUN apk update && apk upgrade && apk add --no-cache \
     php${PHP_VERSION} \
     php${PHP_VERSION}-common \
@@ -24,12 +21,8 @@ RUN apk update && apk upgrade && apk add --no-cache \
     php${PHP_VERSION}-dom \
     php${PHP_VERSION}-simplexml \
     wget
-
 WORKDIR /var/www
-
 RUN wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php && \
     mv adminer-4.8.1.php index.php && chown -R root:root /var/www/
-
 EXPOSE 8080
-
 CMD	[ "php", "-S", "[::]:8080", "-t", "/var/www" ]
