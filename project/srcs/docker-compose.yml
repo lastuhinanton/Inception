@@ -84,8 +84,6 @@ services:
     build:
       context: .
       dockerfile: requirements/bonus/adminer/Dockerfile
-      args:
-        ALPINE_VERSION: ${ALPINE_VERSION}
     container_name: adminer
     depends_on:
       - mariadb
@@ -93,6 +91,16 @@ services:
      - "8080:8080"
     networks:
       - skynet
+    restart: always
+  website:
+    build:
+      context: .
+      dockerfile: requirements/bonus/website/Dockerfile
+      args:
+        ALPINE_VERSION: ${ALPINE_VERSION}
+    container_name: website
+    ports:
+     - "81:80"
     restart: always
   grafana:
     build:
